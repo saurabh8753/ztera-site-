@@ -3,50 +3,50 @@
 
   <url>
     <loc>https://ztera.vercel.app/</loc>
+    <lastmod>2025-01-10</lastmod>
     <priority>1.0</priority>
-    <changefreq>daily</changefreq>
   </url>
 
   <url>
     <loc>https://ztera.vercel.app/player.html</loc>
+    <lastmod>2025-01-10</lastmod>
     <priority>0.9</priority>
-    <changefreq>weekly</changefreq>
   </url>
 
   <url>
     <loc>https://ztera.vercel.app/downloader.html</loc>
+    <lastmod>2025-01-10</lastmod>
     <priority>0.9</priority>
-    <changefreq>weekly</changefreq>
   </url>
 
   <url>
     <loc>https://ztera.vercel.app/blog.html</loc>
+    <lastmod>2025-01-10</lastmod>
     <priority>0.8</priority>
-    <changefreq>weekly</changefreq>
   </url>
 
   <url>
     <loc>https://ztera.vercel.app/blog1.html</loc>
+    <lastmod>2025-01-10</lastmod>
     <priority>0.7</priority>
-    <changefreq>monthly</changefreq>
   </url>
 
   <url>
     <loc>https://ztera.vercel.app/blog2.html</loc>
+    <lastmod>2025-01-10</lastmod>
     <priority>0.7</priority>
-    <changefreq>monthly</changefreq>
   </url>
 
   <url>
     <loc>https://ztera.vercel.app/blog3.html</loc>
+    <lastmod>2025-01-10</lastmod>
     <priority>0.7</priority>
-    <changefreq>monthly</changefreq>
   </url>
 
   <url>
     <loc>https://ztera.vercel.app/blog4.html</loc>
+    <lastmod>2025-01-10</lastmod>
     <priority>0.7</priority>
-    <changefreq>monthly</changefreq>
   </url>
 
 </urlset>
