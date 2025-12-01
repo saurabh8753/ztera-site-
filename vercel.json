@@ -1,17 +1,18 @@
 {
-  "version": 2,
   "routes": [
     {
       "src": "/sitemap.xml",
-      "dest": "/sitemap.xml"
+      "dest": "/sitemap.xml",
+      "headers": {
+        "Content-Type": "application/xml"
+      }
     },
     {
       "src": "/robots.txt",
-      "dest": "/robots.txt"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
+      "dest": "/robots.txt",
+      "headers": {
+        "Content-Type": "text/plain"
+      }
     }
   ]
 }
