@@ -1,16 +1,9 @@
 {
-  "trailingSlash": false,
-  "cleanUrls": true,
-  "headers": [
+  "redirects": [
     {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
-      ]
+      "source": "/sitemap",
+      "destination": "/sitemap.xml",
+      "permanent": true
     }
-  ],
-  "routes": [
-    { "src": "/sitemap.xml", "dest": "/sitemap.xml" },
-    { "src": "/robots.txt", "dest": "/robots.txt" }
   ]
 }
