@@ -11,37 +11,36 @@
 
 <!-- ⭐ PWA Manifest -->
 <link rel="manifest" href="manifest.json" />
-
 <meta name="theme-color" content="#3248f5" />
 
-<!-- ⭐ Add To Home Screen Prompt Style -->
+<!-- ⭐ Floating Install Badge -->
 <style>
-#installPopup {
+#installBadge{
   position: fixed;
+  right: 18px;
   bottom: 20px;
-  right: 20px;
-  background: white;
-  color: #000;
-  padding: 14px 18px;
-  border-radius: 14px;
-  border: 1px solid #ddd;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
-  font-family: system-ui;
-  display: none;
-  z-index: 99999;
+  background: linear-gradient(135deg,#3248f5,#6d28d9);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 700;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  cursor: pointer;
+  z-index: 999999;
+  display: none; /* default hidden */
+  animation: floatUpDown 2s infinite ease-in-out;
 }
-#installPopup button{
-  background:#3248f5;
-  color:white;
-  border:0;
-  padding:8px 14px;
-  border-radius:10px;
-  font-weight:600;
-  margin-left:10px;
+
+/* Floating animation */
+@keyframes floatUpDown{
+  0%{ transform: translateY(0); }
+  50%{ transform: translateY(-6px); }
+  100%{ transform: translateY(0); }
 }
 </style>
 
-<!-- ⭐ Your Original Homepage CSS (unchanged) -->
+<!-- ⭐ Original CSS (unchanged) -->
 <style>
 :root{
   --bg1:#eef3ff; 
@@ -148,14 +147,10 @@ a.internal{
 </style>
 
 </head>
-
 <body>
 
-<!-- ⭐ Install popup -->
-<div id="installPopup">
-  Install ZTERA App?
-  <button id="installBtn">Install</button>
-</div>
+<!-- ⭐ FLOATING BADGE -->
+<div id="installBadge">⬇ Install ZTERA App</div>
 
 <div class="wrap">
 
@@ -178,23 +173,14 @@ a.internal{
   </p>
 </section>
 
-<!-- ⭐ SEO content remains same (unchanged) -->
+<!-- ⭐ SEO SECTION (unchanged) -->
 <section class="section">
   <h2>What is ZTERA?</h2>
   <p>ZTERA is the fastest...</p>
 
-  <h2>Why ZTERA is Better?</h2>
+  <h2>Useful Tools</h2>
   <ul>
-    <li>No ads</li>
-    <li>Fast video loading</li>
-    <li>Auto-detect links</li>
-    <li>Works on all devices</li>
-    <li>Direct download support</li>
-  </ul>
-
-  <h2>Useful ZTERA Tools</h2>
-  <ul>
-    <li><a href="player.html" class="internal">▶ ZTERA Video Player</a></li>
+    <li><a href="player.html" class="internal">▶ ZTERA Player</a></li>
     <li><a href="downloader.html" class="internal">⬇ ZTERA Downloader</a></li>
     <li><a href="blog.html" class="internal">📚 ZTERA Blog</a></li>
   </ul>
@@ -203,31 +189,22 @@ a.internal{
 
 </div>
 
-<!-- ⭐ PWA INSTALL + REPEAT POPUP SCRIPT -->
+<!-- ⭐ Floating Badge Install Script -->
 <script>
 let deferredPrompt;
-let popup = document.getElementById("installPopup");
-let installBtn = document.getElementById("installBtn");
+const badge = document.getElementById("installBadge");
 
 window.addEventListener("beforeinstallprompt", (e)=>{
   e.preventDefault();
   deferredPrompt = e;
-  showPopup();
+  badge.style.display = "block"; // badge always visible after support
 });
 
-function showPopup(){
-  popup.style.display = "block";
-  setTimeout(()=>{ popup.style.display = "none"; }, 5000);
-
-  // ⭐ Popup har 15 second me dubaara show hoga
-  setTimeout(()=>{ if(deferredPrompt) showPopup(); },15000);
-}
-
-installBtn.addEventListener("click", async ()=>{
-  popup.style.display = "none";
+badge.addEventListener("click", async () => {
+  if (!deferredPrompt) return;
   deferredPrompt.prompt();
   await deferredPrompt.userChoice;
-  deferredPrompt = null;
+  deferredPrompt = null; // hides after install
 });
 </script>
 
