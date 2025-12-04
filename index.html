@@ -7,11 +7,17 @@
 <title>ZTERA – TeraBox Video Player & Downloader (HD Online Player)</title>
 
 <!-- ⭐ Favicon -->
-<link rel="icon" type="image/png" 
-href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABYUlEQVR4nO3aMU4CURSF4ZeJgpQAyEykhDIhDSQTSJDMhczASrCipA8ihDJIIXN0d7d+7e8GR2cblt2t7tz12Znd2V9k13u8z/M4z7u9zHkU05wAAQIECBAgQIAAgWEOKHcCbn5wCMZTtqFjA+YH/DLy8rrR8ACa+o6E7ggrN2M8IcWvJ5P8fw8Ky3nDfcjLvYEQz1h0zG2BCyEwF6t2lYpZ2gCAtwTlxMSJKwm2VbzoCj3tZ2f4Kb9p44YhvyaG6q0N3qGZJPNvs+jJ5H6p0sS9ym6u6LcT+ca2bGoP0t1vkl6rl4p9e/UHY5B2nzLjkYqcMIn2zBrrKZSe1mwE2ZLx4nWilSbEm4nl/5WkU2p7E6Z5w7xI7+IKbF3y5E4DUtcgQIECBAgAABAwb4Av4BR8dRlFZpJ5UAAAAASUVORK5CYII=" />
+<link rel="icon" type="image/png" href="icon.png" />
 
+<!-- ⭐ PWA Needs This -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#3248f5">
+
+<!-- iOS Support -->
+<link rel="apple-touch-icon" href="icon.png" />
+
+<!-- SEO -->
 <meta name="description" content="ZTERA is the fastest TeraBox Video Player & Downloader. Play Terabox videos online in HD without ads. Generate direct download links instantly. Works on PC & Mobile.">
-
 <meta name="keywords" content="ZTERA, Terabox Player, Terabox Downloader, Terabox Online Player, HD Terabox Player, Terabox Link Generator, Play Terabox Video">
 
 <style>
@@ -161,14 +167,6 @@ href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABYUlE
       <li><a href="blog.html" class="internal">📚 ZTERA Blog – Tips & Guides</a></li>
     </ul>
 
-    <h2>How to Play Terabox Video Online?</h2>
-    <ol>
-      <li>Open ZTERA Homepage</li>
-      <li>Paste your Terabox video link</li>
-      <li>Click “Open Video”</li>
-      <li>Enjoy HD video playback</li>
-    </ol>
-
     <h2>FAQs (Google Ranking Support)</h2>
     <p><b>Is ZTERA safe?</b> — Yes, 100% safe, no login required.</p>
     <p><b>Does ZTERA support HD?</b> — Yes, supports 360p to 1080p.</p>
@@ -177,8 +175,15 @@ href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABYUlE
 
 </div>
 
+<!-- ⭐ PWA Service Worker Register -->
 <script>
-/* Same JS code from your homepage (unchanged) */
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js");
+}
+</script>
+
+<script>
+/* Your original JS */
 const mirrors = [
   "1024tera.com","1024terabox.com","nephobox.com",
   "gibibox.com","4funbox.com","teraboxurl.com",
@@ -218,10 +223,6 @@ function openCentered(url,w=1050,h=720){
 
 openBtn.addEventListener("click",()=>{
   let url = input.value.trim();
-  if(url.length<10){
-    alert("⚠ Enter a valid TeraBox link.");
-    return;
-  }
   url = normalize(url);
   if(!url.startsWith("http")){ url = "https://" + url; }
 
