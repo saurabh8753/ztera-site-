@@ -1,0 +1,16 @@
+{
+  "name": "ZTERA - Terabox Video Player",
+  "short_name": "ZTERA",
+  "description": "Fast Terabox Video Player & Downloader without ads.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000A2A",
+  "theme_color": "#1F2BF5",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
