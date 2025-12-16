@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,210 +16,191 @@
 <!-- ⭐ Google Analytics (GA4) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-E6G38YDKRW"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-E6G38YDKRW');
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-E6G38YDKRW');
 </script>
 
 <!-- ⭐ Install Badge -->
 <style>
-#installBadge {
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  background: #3248f5;
-  color: white;
-  padding: 12px 18px;
-  border-radius: 50px;
-  font-family: system-ui;
-  font-size: 16px;
-  display: none;
-  cursor: pointer;
-  box-shadow: 0 6px 22px rgba(0,0,0,0.25);
-  animation: pulseBadge 1.4s infinite ease-in-out;
-  z-index: 99999;
+#installBadge{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  background:#3248f5;
+  color:#fff;
+  padding:12px 18px;
+  border-radius:50px;
+  font-family:system-ui;
+  font-size:16px;
+  display:none;
+  cursor:pointer;
+  box-shadow:0 6px 22px rgba(0,0,0,.25);
+  animation:pulseBadge 1.4s infinite;
+  z-index:99999;
 }
-@keyframes pulseBadge {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.08); }
-  100% { transform: scale(1); }
+@keyframes pulseBadge{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.08)}
+  100%{transform:scale(1)}
 }
+</style>
 
-/* ⭐ Telegram Button */
+<!-- ⭐ Homepage Styles -->
+<style>
+:root{--bg1:#eef3ff;--bg2:#f8fbff;--text:#0f172a}
+body{
+  margin:0;
+  font-family:Inter,system-ui,Segoe UI,Roboto,Arial;
+  background:linear-gradient(180deg,var(--bg1),var(--bg2));
+  color:var(--text)
+}
+.wrap{max-width:980px;margin:30px auto;padding:16px}
+.hero{text-align:center}
+h1{font-size:40px;color:#3248f5;font-weight:800}
+p.lead{color:#6f7280;font-size:17px}
+.card{
+  background:#fff;
+  padding:22px;
+  border-radius:20px;
+  border:1px solid #e7e9ff;
+  box-shadow:0 12px 26px rgba(0,0,0,.08)
+}
+.row{display:flex;gap:12px}
+.row input{
+  flex:1;
+  padding:14px 16px;
+  font-size:16px;
+  border-radius:14px;
+  border:1px solid #d7d9ef;
+  background:#f8f9ff
+}
+.btn{
+  padding:14px 26px;
+  border-radius:16px;
+  font-size:18px;
+  font-weight:700;
+  color:#fff;
+  border:0;
+  cursor:pointer;
+  background:linear-gradient(135deg,#6d28d9,#4f46e5,#7c3aed)
+}
+.neonPulse{animation:neonPulse 1.8s infinite}
+@keyframes neonPulse{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.08)}
+  100%{transform:scale(1)}
+}
+.neonNote{
+  margin-top:14px;
+  padding:10px 16px;
+  text-align:center;
+  color:#ff4d4d;
+  font-weight:600;
+  background:rgba(255,0,0,.15);
+  border-radius:14px;
+}
+</style>
+
+<!-- ⭐ Telegram Button Style -->
+<style>
 .telegram-btn{
   margin-top:14px;
   display:inline-flex;
   align-items:center;
   gap:10px;
-  padding:12px 20px;
+  padding:10px 18px;
   background:#229ED9;
   color:#fff;
-  text-decoration:none;
+  border-radius:50px;
   font-weight:700;
-  border-radius:30px;
-  box-shadow:0 0 18px rgba(34,158,217,.7);
-  animation:tgPulse 1.6s infinite ease-in-out;
+  text-decoration:none;
+  animation:tgPulse 1.6s infinite;
 }
-.telegram-btn svg{
+.telegram-btn img{
   width:22px;
   height:22px;
-  fill:#fff;
-}
-.telegram-btn:hover{
-  transform:scale(1.08);
 }
 @keyframes tgPulse{
-  0%{box-shadow:0 0 12px rgba(34,158,217,.6);}
-  50%{box-shadow:0 0 28px rgba(34,158,217,1);}
-  100%{box-shadow:0 0 12px rgba(34,158,217,.6);}
-}
-</style>
-
-<!-- ⭐ Original Homepage Styles -->
-<style>
-:root{
-  --bg1:#eef3ff;
-  --bg2:#f8fbff;
-  --text:#0f172a;
-}
-body{
-  margin:0;
-  font-family:Inter,system-ui,Segoe UI,Roboto,Arial;
-  color:var(--text);
-  background:linear-gradient(180deg,var(--bg1),var(--bg2));
-}
-.wrap{ max-width:980px; margin:30px auto; padding:16px; }
-.hero{text-align:center;}
-h1{ font-size:40px; margin:8px 0; color:#3248f5; font-weight:800; }
-p.lead{ color:#6f7280; margin:0 0 20px; font-size:17px; }
-
-.card{
-  background:#fff; padding:22px; border-radius:20px;
-  border:1px solid #e7e9ff; box-shadow:0 12px 26px rgba(0,0,0,.08);
-}
-.row{ display:flex; flex-wrap:wrap; gap:12px; }
-.row input{
-  flex:1; padding:14px 16px; font-size:16px;
-  border-radius:14px; border:1px solid #d7d9ef; background:#f8f9ff;
-}
-.btn{
-  padding:14px 26px; border:0; border-radius:16px;
-  font-size:18px; font-weight:700; color:white; cursor:pointer;
-  background:linear-gradient(135deg,#6d28d9,#4f46e5,#7c3aed);
-}
-.neonPulse{ animation:neonPulseAnim 1.8s infinite ease-in-out; }
-@keyframes neonPulseAnim { 0%{transform:scale(1);} 50%{transform:scale(1.08);} 100%{transform:scale(1);} }
-
-.neonNote{
-  text-align:center; margin-top:14px; padding:10px 16px;
-  font-size:15px; font-weight:600; color:#ff4d4d;
-  background:rgba(255,0,0,0.15); border:1px solid rgba(255,0,0,0.4);
-  border-radius:14px;
-}
-.section{
-  margin-top:40px; background:white; padding:20px 24px;
-  border-radius:20px; border:1px solid #e5e7ff;
+  0%{transform:scale(1)}
+  50%{transform:scale(1.1)}
+  100%{transform:scale(1)}
 }
 </style>
 
 </head>
 <body>
 
-<!-- ⭐ Install Badge -->
 <div id="installBadge">📲 Install ZTERA App</div>
 
 <div class="wrap">
 
 <header class="hero">
-  <h1>ZTERA – TeraBox HD Video Player</h1>
-  <p class="lead">Play and Download Terabox Videos Without Ads – Fast, Secure & HD Quality</p>
+<h1>ZTERA – TeraBox HD Video Player</h1>
+<p class="lead">Play and Download Terabox Videos Without Ads – Fast & Secure</p>
 </header>
 
 <section class="card">
-  <div class="row">
-    <input id="tbxUrl" type="url" placeholder="Enter TeraBox link here…">
-  </div>
+<div class="row">
+<input id="tbxUrl" type="url" placeholder="Enter TeraBox link here…">
+</div>
 
-  <div style="text-align:center; margin-top:18px;">
-    <button id="openVideo" class="btn neonPulse">▶ Play Video</button>
+<div style="text-align:center;margin-top:18px">
+<button id="openVideo" class="btn neonPulse">▶ Play Video</button>
 
-    <!-- ⭐ Telegram Join Button -->
-    <div>
-      <a class="telegram-btn"
-         href="https://telegram.me/+-Qt0LAeB71E0ZTll"
-         target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24">
-          <path d="M22 2L2 11l5.5 2L9 22l4-4 4.5 3L22 2z"/>
-        </svg>
-        Join for Updates
-      </a>
-    </div>
-  </div>
+<!-- ✅ TELEGRAM BUTTON (ADDED) -->
+<br>
+<a class="telegram-btn" href="https://telegram.me/+-Qt0LAeB71E0ZTll" target="_blank">
+<img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg">
+Join for Updates
+</a>
+</div>
 
-  <p class="neonNote">
-    ⚠ <b>Note:</b> Turn on your mobile Auto-rotate mode for full-screen video.
-  </p>
+<p class="neonNote">
+⚠ <b>Note:</b> Turn on your mobile Auto-rotate mode for full-screen video.
+</p>
 </section>
 
-<!-- ⭐ IFRAME VIDEO PLAYER SECTION -->
-<section id="videoSection" style="margin-top:35px; display:none;">
-  <div style="max-width:1200px; margin:auto; aspect-ratio:16/9;">
-    <iframe id="videoFrame" allowfullscreen style="width:100%; height:100%; border:none; border-radius:10px;"></iframe>
-  </div>
+<!-- ⭐ VIDEO -->
+<section id="videoSection" style="display:none;margin-top:35px">
+<div style="max-width:1200px;margin:auto;aspect-ratio:16/9">
+<iframe id="videoFrame" allowfullscreen style="width:100%;height:100%;border:none;border-radius:10px"></iframe>
+</div>
 </section>
 
 </div>
 
-<!-- ⭐ JS: Badge + SW -->
 <script>
 let deferredPrompt;
-let badge = document.getElementById("installBadge");
-
-window.addEventListener("beforeinstallprompt", (e)=>{
-  e.preventDefault();
-  deferredPrompt = e;
-  badge.style.display = "block";
+const badge=document.getElementById("installBadge");
+window.addEventListener("beforeinstallprompt",e=>{
+e.preventDefault();
+deferredPrompt=e;
+badge.style.display="block";
 });
-
-badge.addEventListener("click", async ()=>{
-  badge.style.display = "none";
-  if(deferredPrompt){
-    deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
-    deferredPrompt = null;
-  }
-  setTimeout(()=>{ badge.style.display = "block"; },15000);
-});
-
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("service-worker.js").catch(()=>{});
+badge.onclick=async()=>{
+badge.style.display="none";
+if(deferredPrompt){
+deferredPrompt.prompt();
+await deferredPrompt.userChoice;
+deferredPrompt=null;
+setTimeout(()=>badge.style.display="block",15000);
 }
+};
 </script>
 
-<!-- ⭐ JS: TeraBox URL → IFRAME + Auto Scroll -->
 <script>
-document.getElementById("openVideo").addEventListener("click", ()=>{
-  let url = document.getElementById("tbxUrl").value.trim();
-  if(url.length < 10){
-    alert("Please enter a valid TeraBox link");
-    return;
-  }
-  if(!url.startsWith("http")) url = "https://" + url;
-
-  const finalURL =
-    "https://iteraplay.com/api/play.php?url=" +
-    encodeURIComponent(url) + "&key=iTeraPlay2025";
-
-  document.getElementById("videoFrame").src = finalURL;
-  document.getElementById("videoSection").style.display = "block";
-
-  setTimeout(()=>{
-    document.getElementById("videoSection")
-      .scrollIntoView({ behavior:"smooth" });
-  }, 500);
-});
+document.getElementById("openVideo").onclick=()=>{
+let url=document.getElementById("tbxUrl").value.trim();
+if(url.length<10)return alert("Enter valid Terabox link");
+if(!url.startsWith("http"))url="https://"+url;
+document.getElementById("videoFrame").src=
+"https://iteraplay.com/api/play.php?url="+encodeURIComponent(url)+"&key=iTeraPlay2025";
+document.getElementById("videoSection").style.display="block";
+document.getElementById("videoSection").scrollIntoView({behavior:"smooth"});
+};
 </script>
 
 </body>
-      </html>
+  </html>
