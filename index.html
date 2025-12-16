@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,7 +60,6 @@ gtag('config', 'G-E6G38YDKRW');
 .telegram-btn span{font-size:20px}
 </style>
 
-<!-- ⭐ Original Styles -->
 <style>
 :root{--bg1:#eef3ff;--bg2:#f8fbff;--text:#0f172a;}
 body{
@@ -126,12 +124,9 @@ a.internal{color:#3248f5;font-weight:600;text-decoration:none}
 
 <div style="text-align:center;margin-top:18px;">
 <button id="openVideo" class="btn neonPulse">▶ Play Video</button>
-
-<!-- ✅ TELEGRAM BUTTON (NEW) -->
 <br>
-<a href="https://telegram.me/+-Qt0LAeB71E0ZTll" 
-   class="telegram-btn" target="_blank">
-   <span>📢</span> Join for Updates
+<a href="https://telegram.me/+-Qt0LAeB71E0ZTll" class="telegram-btn" target="_blank">
+<span>📢</span> Join for Updates
 </a>
 </div>
 
@@ -151,7 +146,6 @@ style="width:100%;height:100%;border:none;border-radius:10px"></iframe>
 </div>
 </section>
 
-<!-- 🔥 SEO ARTICLE CONTENT (UNCHANGED – FULL) -->
 <section class="section article-content" id="seoArticle">
   <h2>⭐ ZTERA – Best TeraBox Video Player & Downloader (HD Online Streaming)</h2>
 
@@ -293,8 +287,6 @@ style="width:100%;height:100%;border:none;border-radius:10px"></iframe>
   </p>
 
 </section>
-
-
 </div>
 
 <script>
@@ -321,6 +313,28 @@ document.getElementById("openVideo").onclick=()=>{
   videoSection.style.display="block";
   setTimeout(()=>videoSection.scrollIntoView({behavior:"smooth"}),500);
 };
+</script>
+
+<!-- ===============================
+     TELEGRAM BOT → AUTO PLAY LOGIC
+     =============================== -->
+<script>
+(function () {
+  const params = new URLSearchParams(window.location.search);
+  const botUrl = params.get("url");
+
+  if (botUrl && botUrl.length > 10) {
+    const input = document.getElementById("tbxUrl");
+    const playBtn = document.getElementById("openVideo");
+
+    if (input && playBtn) {
+      input.value = decodeURIComponent(botUrl);
+      setTimeout(() => {
+        playBtn.click();
+      }, 1200);
+    }
+  }
+})();
 </script>
 
 </body>
