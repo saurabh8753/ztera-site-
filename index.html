@@ -7,15 +7,18 @@
 
 <meta name="theme-color" content="#3248f5">
 
-<!-- 💰 ADSTERRA SOCIAL BAR AUTO -->
-<script type='text/javascript'>
+<!-- 💰 ADSTERRA SOCIAL BAR -->
+<script>
 (function(){
-  var s=document.createElement('script');
-  s.src='//pl22568764.highrevenuegate.com/1d/72/aa/1d72aa_social.js';
+  var s=document.createElement("script");
+  s.src="//pl22568764.highrevenuegate.com/1d/72/aa/1d72aa_social.js";
   s.async=true;
   document.head.appendChild(s);
 })();
 </script>
+
+<!-- 🔥 HLS.JS -->
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
 body{margin:0;font-family:Inter,system-ui;background:#eef3ff}
@@ -24,38 +27,42 @@ body{margin:0;font-family:Inter,system-ui;background:#eef3ff}
 h1{color:#3248f5;font-size:38px}
 .card{background:#fff;padding:22px;border-radius:20px}
 input{width:100%;padding:14px;border-radius:14px;border:1px solid #ccc}
-.btn{margin-top:16px;padding:14px;border-radius:16px;background:#4f46e5;color:#fff;font-size:18px;font-weight:700;border:0;width:100%}
+.btn{
+  margin-top:16px;padding:14px;border-radius:16px;
+  background:#4f46e5;color:#fff;font-size:18px;
+  font-weight:700;border:0;width:100%;cursor:pointer
+}
+.note{text-align:center;color:#ff4d4d;font-weight:600}
 
 /* 🌈 NEON MODAL */
 .modal{
   position:fixed;inset:0;
   background:rgba(0,0,0,.75);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:9999;
+  display:none;align-items:center;justify-content:center;
+  z-index:9999
 }
 .modal-box{
   width:100%;max-width:920px;
   padding:14px;border-radius:22px;
   background:#000;
-  animation:neonPulse 2.2s infinite alternate;
+  animation:neon 2.2s infinite alternate
 }
-@keyframes neonPulse{
+@keyframes neon{
   from{box-shadow:0 0 18px #4f46e5}
   to{box-shadow:0 0 55px #22d3ee}
 }
-
-video{width:100%;max-height:72vh;border-radius:16px;background:#000}
-
+video{
+  width:100%;max-height:72vh;
+  border-radius:16px;background:#000
+}
 .controls{display:flex;gap:10px;margin-top:12px}
 select,.download-btn{
   flex:1;padding:12px;border-radius:12px;font-weight:700
 }
 .download-btn{
-  background:#16a34a;color:#fff;text-align:center;text-decoration:none
+  background:#16a34a;color:#fff;
+  text-align:center;text-decoration:none
 }
-.note{text-align:center;color:#ff4d4d;font-weight:600}
 </style>
 </head>
 
@@ -64,7 +71,7 @@ select,.download-btn{
 <div class="wrap">
 <header class="hero">
 <h1>ZTERA – AI Neon Player</h1>
-<p>1080p • Auto Speed Detect • Instant Play</p>
+<p>1080p • HLS Adaptive • Auto Mirror</p>
 </header>
 
 <section class="card">
@@ -85,35 +92,57 @@ select,.download-btn{
         <option value="720p">720p</option>
         <option value="360p">360p</option>
       </select>
-      <a id="downloadBtn" class="download-btn" target="_blank">⬇ Download</a>
+      <a id="downloadBtn" class="download-btn">⬇ Download</a>
     </div>
   </div>
 </div>
 
 <script>
-let mirrors={},order=[],current=0;
+let mirrors={}, order=[], current=0;
+let hls=null;
 const video=document.getElementById("video");
 
-/* 🧠 SPEED TEST (AI QUALITY) */
+/* 🧠 SPEED DETECTION */
 async function detectQuality(){
   const t=Date.now();
-  try{
-    await fetch("https://www.cloudflare.com/cdn-cgi/trace",{mode:"no-cors"});
-  }catch{}
-  const speed=Date.now()-t;
-  if(speed<250) return "1080p";
-  if(speed<600) return "720p";
+  try{await fetch("https://www.cloudflare.com/cdn-cgi/trace",{mode:"no-cors"});}catch{}
+  const ms=Date.now()-t;
+  if(ms<250) return "1080p";
+  if(ms<600) return "720p";
   return "360p";
 }
 
+/* 🔥 PLAY SOURCE (MP4 / HLS) */
+function playSource(url){
+  if(hls){hls.destroy();hls=null;}
+  if(!url) return;
+
+  if(url.includes(".m3u8")){
+    if(video.canPlayType("application/vnd.apple.mpegurl")){
+      video.src=url; // iOS
+    }else if(Hls.isSupported()){
+      hls=new Hls({autoStartLoad:true});
+      hls.loadSource(url);
+      hls.attachMedia(video);
+    }
+  }else{
+    video.src=url; // MP4
+  }
+
+  video.load();
+  video.play().catch(()=>{});
+}
+
+/* 🚀 LOAD VIDEO */
 async function loadVideo(){
   const u=tbxUrl.value.trim();
-  if(u.length<10) return alert("Invalid link");
-
-  const api="https://iteraplay.in/api/fetch?url="+encodeURIComponent(u);
+  if(u.length<10) return alert("Invalid Terabox link");
 
   try{
-    const r=await fetch(api,{cache:"no-store"});
+    const r=await fetch(
+      "https://iteraplay.in/api/fetch?url="+encodeURIComponent(u),
+      {cache:"no-store"}
+    );
     const d=await r.json();
     if(d.status!=="success") throw 0;
 
@@ -122,6 +151,7 @@ async function loadVideo(){
     mirrors.base=f.stream_url;
 
     const ai=await detectQuality();
+
     order=[
       mirrors[ai],
       mirrors["1080p"],
@@ -131,52 +161,56 @@ async function loadVideo(){
     ].filter(Boolean);
 
     current=0;
-    playMirror();
+    playSource(order[current]);
 
-    downloadBtn.href=f.fast_download_link||f.download_link;
+    /* ⬇️ DOWNLOAD FIX (Chrome Safe) */
+    downloadBtn.onclick=e=>{
+      e.preventDefault();
+      window.open(
+        f.fast_download_link || f.download_link || mirrors.base,
+        "_blank"
+      );
+    };
+
     modal.style.display="flex";
-
     setTimeout(()=>video.play().catch(()=>{}),300);
 
   }catch{
-    alert("Server error");
+    alert("Server error or link expired");
   }
 }
 
 /* 📡 AUTO MIRROR SWITCH */
-function playMirror(){
-  video.src=order[current];
-  video.load();
-  video.play().catch(()=>{});
-}
 video.onerror=()=>{
   current++;
-  if(current<order.length) playMirror();
-  else alert("All streams failed");
+  if(current<order.length){
+    playSource(order[current]);
+  }else{
+    alert("All mirrors failed");
+  }
 };
 
-/* 💾 MANUAL OVERRIDE */
+/* 🎚 MANUAL QUALITY */
 function manualQuality(){
   const q=quality.value;
   if(q==="auto") return loadVideo();
-  order=[mirrors[q],mirrors.base].filter(Boolean);
-  current=0;
-  playMirror();
+  playSource(mirrors[q]||mirrors.base);
 }
 
-/* CLOSE MODAL */
+/* ❌ CLOSE MODAL */
 modal.onclick=e=>{
   if(e.target.id==="modal"){
     modal.style.display="none";
     video.pause();
+    if(hls){hls.destroy();hls=null;}
   }
 };
 
-/* ⚡ BOT AUTO PLAY */
+/* 🤖 TELEGRAM AUTO PLAY */
 (()=>{
- const p=new URLSearchParams(location.search);
- const u=p.get("url");
- if(u){tbxUrl.value=u;setTimeout(loadVideo,600);}
+  const p=new URLSearchParams(location.search);
+  const u=p.get("url");
+  if(u){tbxUrl.value=u;setTimeout(loadVideo,600);}
 })();
 </script>
 
