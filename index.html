@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ZTERA – Neon TeraBox Player & Downloader</title>
+<title>ZTERA – Neon TeraBox Player</title>
 
 <meta name="theme-color" content="#3248f5">
 
-<!-- 💰 ADSTERRA SOCIAL BAR (GLOBAL) -->
+<!-- 💰 ADSTERRA SOCIAL BAR -->
 <script>
 (function(){
   var s=document.createElement("script");
@@ -114,7 +114,7 @@ select,.download-btn{
 <div class="wrap">
 <header class="hero">
 <h1>ZTERA – Neon HD Player</h1>
-<p>AI Auto Quality • Browser-Only Download</p>
+<p>Play & Download in Browser (One Click)</p>
 </header>
 
 <section class="card">
@@ -140,13 +140,13 @@ select,.download-btn{
   </div>
 </div>
 
-<!-- 🌈 NEON DOWNLOAD MODAL -->
+<!-- 🌈 DOWNLOAD MODAL -->
 <div id="dlModal" class="dl-overlay">
   <div class="dl-box neon-glow">
     <h3>⬇ Download Video</h3>
 
     <button class="dl-btn green" onclick="fastDownload()">
-      🚀 Fast Download (Browser)
+      ▶ Play & Download (Browser)
     </button>
 
     <button class="dl-btn blue" onclick="externalDownload()">
@@ -241,7 +241,7 @@ async function loadVideo(){
   }
 }
 
-/* 📡 MIRROR FAILOVER */
+/* 📡 FAILOVER */
 video.onerror=()=>{
   current++;
   if(current<order.length){
@@ -269,19 +269,23 @@ downloadBtn.onclick=e=>{
   dlModal.style.display="flex";
 };
 
+/* ✅ FAST DOWNLOAD = PLAY + DOWNLOAD IN SAME TAB */
 function fastDownload(){
-  window.open(bestStream,"_blank");
+  window.open(bestStream, "_blank");
   closeDL();
 }
+
 function externalDownload(){
   navigator.clipboard.writeText(bestStream);
   alert("Link copied!\nPaste in ADM / 1DM / VLC");
   closeDL();
 }
+
 function copyLink(){
   navigator.clipboard.writeText(bestStream);
   alert("Video link copied");
 }
+
 function closeDL(){
   dlModal.style.display="none";
 }
@@ -303,7 +307,7 @@ modal.onclick=e=>{
 })();
 </script>
 
-<!-- 💰 ADSTERRA LOAD INSIDE DOWNLOAD MODAL -->
+<!-- 💰 ADSTERRA INSIDE DOWNLOAD MODAL -->
 <script>
 (function(){
   var s=document.createElement("script");
