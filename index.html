@@ -21,13 +21,9 @@ body{
   margin:30px auto;
   padding:16px
 }
-.hero{
-  text-align:center
-}
-h1{
-  color:#3248f5;
-  font-size:38px
-}
+.hero{text-align:center}
+h1{color:#3248f5;font-size:38px}
+
 .card{
   background:#fff;
   padding:22px;
@@ -64,7 +60,7 @@ input{
 }
 
 .error{
-  margin-top:14px;
+  margin-top:10px;
   color:#dc2626;
   font-weight:700;
   text-align:center;
@@ -90,14 +86,14 @@ video{
 <div class="wrap">
 <header class="hero">
 <h1>ZTERA – Inline Video Player</h1>
-<p>Watch TeraBox videos online</p>
+<p>Auto-retry enabled • No popup • No download</p>
 </header>
 
 <section class="card">
 <input id="tbxUrl" placeholder="Paste Terabox link here">
 <button class="btn" onclick="start()">▶ Play Video</button>
 
-<div id="loading" class="loading">⏳ Fetching video…</div>
+<div id="loading" class="loading">⏳ Fetching video… please wait</div>
 <div id="error" class="error"></div>
 
 <div id="player" class="player">
@@ -109,46 +105,45 @@ video{
 <script>
 const API = "https://iteraplay.in/api/fetch?url=";
 
-let hls=null;
+let hls = null;
+let retryTimer = null;
+let stopped = false;
 
-/* 🔁 FETCH WITH RETRY + TIMEOUT */
-async function fetchWithRetry(url, retries=3){
-  for(let i=0;i<retries;i++){
-    try{
-      const controller=new AbortController();
-      setTimeout(()=>controller.abort(),10000);
-
-      const res=await fetch(url,{
-        cache:"no-store",
-        signal:controller.signal
-      });
-
-      if(!res.ok) throw new Error();
-      return await res.json();
-
-    }catch(e){
-      if(i===retries-1) throw e;
-    }
-  }
-}
-
-/* 🚀 START PLAYER */
-async function start(){
-  const link=tbxUrl.value.trim();
-  if(link.length<10){
+/* 🚀 START */
+function start(){
+  const link = tbxUrl.value.trim();
+  if(link.length < 10){
     showError("Invalid TeraBox link");
     return;
   }
 
-  error.style.display="none";
-  loading.style.display="block";
-  player.style.display="none";
+  stopped = false;
+  error.style.display = "none";
+  player.style.display = "none";
+  loading.style.display = "block";
+
+  fetchUntilSuccess(link);
+}
+
+/* 🔁 INFINITE AUTO RETRY */
+async function fetchUntilSuccess(link){
+  if(stopped) return;
 
   try{
-    const data=await fetchWithRetry(API+encodeURIComponent(link));
-    if(data.status!=="success") throw new Error();
+    const controller = new AbortController();
+    setTimeout(()=>controller.abort(), 10000);
 
-    const file=data.list[0];
+    const res = await fetch(
+      API + encodeURIComponent(link),
+      { cache:"no-store", signal: controller.signal }
+    );
+
+    if(!res.ok) throw new Error();
+    const data = await res.json();
+    if(data.status !== "success") throw new Error();
+
+    // ✅ SUCCESS
+    const file = data.list[0];
     const stream =
       file.fast_stream_url?.["720p"] ||
       file.fast_stream_url?.["360p"] ||
@@ -156,29 +151,39 @@ async function start(){
 
     playInline(stream);
 
-    loading.style.display="none";
-    player.style.display="block";
+    loading.style.display = "none";
+    player.style.display = "block";
+    stopped = true; // stop retry loop
+    return;
 
-  }catch{
-    loading.style.display="none";
-    showError("Server busy, try again");
+  }catch(e){
+    // ❌ FAILED → retry again
+    error.textContent = "Server busy… retrying automatically";
+    error.style.display = "block";
+
+    retryTimer = setTimeout(()=>{
+      fetchUntilSuccess(link);
+    }, 2500); // retry delay
   }
 }
 
-/* ▶ INLINE PLAY (HLS + MP4) */
+/* ▶ INLINE PLAY */
 function playInline(url){
-  if(hls){hls.destroy();hls=null;}
+  if(hls){
+    hls.destroy();
+    hls = null;
+  }
 
   if(url.includes(".m3u8")){
     if(video.canPlayType("application/vnd.apple.mpegurl")){
-      video.src=url;
+      video.src = url;
     }else if(Hls.isSupported()){
-      hls=new Hls();
+      hls = new Hls();
       hls.loadSource(url);
       hls.attachMedia(video);
     }
   }else{
-    video.src=url;
+    video.src = url;
   }
 
   video.load();
@@ -186,8 +191,8 @@ function playInline(url){
 }
 
 function showError(msg){
-  error.textContent=msg;
-  error.style.display="block";
+  error.textContent = msg;
+  error.style.display = "block";
 }
 </script>
 
