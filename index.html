@@ -3,19 +3,36 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ZTERA – TeraBox Player & Downloader</title>
+<title>ZTERA – TeraBox Inline Player</title>
 
 <meta name="theme-color" content="#3248f5">
 
-<!-- HLS -->
+<!-- HLS.js -->
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-body{margin:0;font-family:Inter,system-ui;background:#eef3ff}
-.wrap{max-width:980px;margin:30px auto;padding:16px}
-.hero{text-align:center}
-h1{color:#3248f5;font-size:38px}
-.card{background:#fff;padding:22px;border-radius:20px}
+body{
+  margin:0;
+  font-family:Inter,system-ui;
+  background:#eef3ff
+}
+.wrap{
+  max-width:980px;
+  margin:30px auto;
+  padding:16px
+}
+.hero{
+  text-align:center
+}
+h1{
+  color:#3248f5;
+  font-size:38px
+}
+.card{
+  background:#fff;
+  padding:22px;
+  border-radius:20px
+}
 
 input{
   width:100%;
@@ -46,6 +63,14 @@ input{
   display:none
 }
 
+.error{
+  margin-top:14px;
+  color:#dc2626;
+  font-weight:700;
+  text-align:center;
+  display:none
+}
+
 .player{
   margin-top:22px;
   display:none
@@ -57,33 +82,6 @@ video{
   background:#000;
   border-radius:16px
 }
-
-.actions{
-  display:flex;
-  gap:12px;
-  margin-top:14px
-}
-
-.action-btn{
-  flex:1;
-  padding:14px;
-  border-radius:14px;
-  font-weight:700;
-  text-align:center;
-  text-decoration:none;
-  cursor:pointer
-}
-
-.browser{background:#16a34a;color:#fff}
-.server{background:#2563eb;color:#fff}
-
-.error{
-  margin-top:14px;
-  color:#dc2626;
-  font-weight:700;
-  text-align:center;
-  display:none
-}
 </style>
 </head>
 
@@ -91,8 +89,8 @@ video{
 
 <div class="wrap">
 <header class="hero">
-<h1>ZTERA – Inline Player</h1>
-<p>Play & Download TeraBox Videos</p>
+<h1>ZTERA – Inline Video Player</h1>
+<p>Watch TeraBox videos online</p>
 </header>
 
 <section class="card">
@@ -104,45 +102,43 @@ video{
 
 <div id="player" class="player">
   <video id="video" controls playsinline preload="auto"></video>
-
-  <div class="actions">
-    <button class="action-btn browser" onclick="browserPlay()">
-      ▶ Browser Play & Download
-    </button>
-    <button class="action-btn server" onclick="serverDownload()">
-      ⬇ Render Server Download
-    </button>
-  </div>
 </div>
 </section>
 </div>
 
 <script>
 const API = "https://iteraplay.in/api/fetch?url=";
-const RENDER = "https://ztera-downloader.onrender.com";
 
-let mirrors={}, bestStream="", hls=null;
+let hls=null;
 
-/* 🔁 FETCH WITH RETRY */
+/* 🔁 FETCH WITH RETRY + TIMEOUT */
 async function fetchWithRetry(url, retries=3){
   for(let i=0;i<retries;i++){
     try{
-      const c=new AbortController();
-      setTimeout(()=>c.abort(),10000);
+      const controller=new AbortController();
+      setTimeout(()=>controller.abort(),10000);
 
-      const r=await fetch(url,{cache:"no-store",signal:c.signal});
-      if(!r.ok) throw 0;
-      return await r.json();
+      const res=await fetch(url,{
+        cache:"no-store",
+        signal:controller.signal
+      });
+
+      if(!res.ok) throw new Error();
+      return await res.json();
+
     }catch(e){
       if(i===retries-1) throw e;
     }
   }
 }
 
-/* 🚀 START */
+/* 🚀 START PLAYER */
 async function start(){
   const link=tbxUrl.value.trim();
-  if(link.length<10) return showError("Invalid link");
+  if(link.length<10){
+    showError("Invalid TeraBox link");
+    return;
+  }
 
   error.style.display="none";
   loading.style.display="block";
@@ -150,19 +146,15 @@ async function start(){
 
   try{
     const data=await fetchWithRetry(API+encodeURIComponent(link));
-    if(data.status!=="success") throw 0;
+    if(data.status!=="success") throw new Error();
 
-    const f=data.list[0];
-    mirrors=f.fast_stream_url||{};
-    mirrors.base=f.stream_url;
+    const file=data.list[0];
+    const stream =
+      file.fast_stream_url?.["720p"] ||
+      file.fast_stream_url?.["360p"] ||
+      file.stream_url;
 
-    bestStream =
-      mirrors["1080p"] ||
-      mirrors["720p"] ||
-      mirrors["360p"] ||
-      mirrors.base;
-
-    playInline(bestStream);
+    playInline(stream);
 
     loading.style.display="none";
     player.style.display="block";
@@ -173,9 +165,9 @@ async function start(){
   }
 }
 
-/* ▶ INLINE PLAY */
+/* ▶ INLINE PLAY (HLS + MP4) */
 function playInline(url){
-  if(hls){hls.destroy();hls=null}
+  if(hls){hls.destroy();hls=null;}
 
   if(url.includes(".m3u8")){
     if(video.canPlayType("application/vnd.apple.mpegurl")){
@@ -188,26 +180,9 @@ function playInline(url){
   }else{
     video.src=url;
   }
+
+  video.load();
   video.play().catch(()=>{});
-}
-
-/* ▶ BROWSER PLAY + DOWNLOAD */
-function browserPlay(){
-  window.open(bestStream,"_blank");
-}
-
-/* ⬇ SERVER DOWNLOAD */
-async function serverDownload(){
-  try{
-    const t=await fetch(
-      RENDER+"/token?url="+encodeURIComponent(bestStream)
-    ).then(r=>r.json());
-
-    window.location.href =
-      RENDER+"/download?token="+t.token+"&name=ztera_video.mp4";
-  }catch{
-    alert("Download server busy");
-  }
 }
 
 function showError(msg){
