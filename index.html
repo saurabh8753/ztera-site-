@@ -210,12 +210,22 @@ function playInline(url){
 function showError(m){ error.textContent=m; error.style.display="block"; }
 
 /* BOT AUTO PLAY (?url=) */
-(()=>{
- const p=new URLSearchParams(location.search);
- const u=p.get("url");
- if(u){ tbxUrl.value=decodeURIComponent(u); setTimeout(start,800); }
-})();
+(function () {
+  const params = new URLSearchParams(window.location.search);
+  const botUrl = params.get("url");
 
+  if (botUrl && botUrl.length > 10) {
+    const input = document.getElementById("tbxUrl");
+    const playBtn = document.getElementById("openVideo");
+
+    if (input && playBtn) {
+      input.value = decodeURIComponent(botUrl);
+      setTimeout(() => {
+        playBtn.click();
+      }, 1200);
+    }
+  }
+})();
 /* PWA */
 let deferredPrompt;
 window.addEventListener("beforeinstallprompt",e=>{
