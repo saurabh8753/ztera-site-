@@ -210,6 +210,7 @@ function playInline(url){
 function showError(m){ error.textContent=m; error.style.display="block"; }
 
 /* BOT AUTO PLAY (?url=) */
+<script>
 (function () {
   const params = new URLSearchParams(window.location.search);
   const botUrl = params.get("url");
@@ -226,6 +227,7 @@ function showError(m){ error.textContent=m; error.style.display="block"; }
     }
   }
 })();
+</script>
 /* PWA */
 let deferredPrompt;
 window.addEventListener("beforeinstallprompt",e=>{
