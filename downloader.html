@@ -31,9 +31,26 @@ input{width:100%;padding:14px;border-radius:14px;border:1px solid #ccc;font-size
 .btn{margin-top:16px;padding:14px;border-radius:16px;background:#4f46e5;color:#fff;
 font-size:18px;font-weight:700;border:0;width:100%;cursor:pointer}
 
-.loading{margin-top:14px;text-align:center;font-weight:700;color:#3248f5;display:none}
-.error{margin-top:10px;color:#dc2626;font-weight:700;text-align:center;display:none}
+/* LOADER */
+.loading{
+  margin-top:16px;
+  text-align:center;
+  font-weight:700;
+  color:#3248f5;
+  display:none
+}
+.loader-spin{
+  width:28px;
+  height:28px;
+  border:3px solid #dbe6ff;
+  border-top-color:#3248f5;
+  border-radius:50%;
+  margin:0 auto 8px auto;
+  animation:spin 0.9s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
 
+/* player */
 .player{margin-top:22px;display:none}
 video{width:100%;max-height:70vh;background:#000;border-radius:16px}
 
@@ -78,31 +95,30 @@ video{width:100%;max-height:70vh;background:#000;border-radius:16px}
 <input id="tbxUrl" placeholder="Paste Terabox link here">
 <button class="btn" onclick="start()">▶ Play Video</button>
 
+<!-- JOIN BUTTON -->
 <div class="join">
-  <a href="https://telegram.me/+-Qt0LAeB71E0ZTll" target="_blank">📢 Join for Updates</a>
+  <a href="https://telegram.me/+-Qt0LAeB71E0ZTll" target="_blank">
+    📢 Join for Updates
+  </a>
 </div>
 
-<div id="loading" class="loading">⏳ Fetching video… please wait</div>
+<!-- ADS UNDER JOIN BUTTON -->
+<div id="adsBoxTop" style="margin-top:14px;text-align:center">
+  <script async data-cfasync="false"
+   src="https://pl28188629.effectivegatecpm.com/9a259b450791fd97609d22be0d2f1525/invoke.js"></script>
+  <div id="container-9a259b450791fd97609d22be0d2f1525"></div>
+</div>
 
-<!-- error still exists but hidden (no text shown) -->
-<div id="error" class="error"></div>
+<!-- LOADING -->
+<div id="loading" class="loading">
+  <div class="loader-spin"></div>
+  Fetching video… please wait
+</div>
 
 <div id="player" class="player">
   <video id="video" controls playsinline preload="auto"></video>
 </div>
 
-<!-- ADS BELOW PLAYER -->
-<div id="adsBox" style="margin-top:16px;display:none;text-align:center">
-  <script async data-cfasync="false"
-  src="https://pl28188629.effectivegatecpm.com/9a259b450791fd97609d22be0d2f1525/invoke.js"></script>
-  <div id="container-9a259b450791fd97609d22be0d2f1525"></div>
-</div>
-
-</section>
-
-<!-- SEO article placeholder -->
-<section class="card" style="margin-top:25px">
-<p><b>SEO Content:</b> (your full article stays here — unchanged)</p>
 </section>
 
 </div>
@@ -114,8 +130,7 @@ let hls=null, retryTimer=null, stopped=false;
 /******** CHROME-ONLY (BLOCK TELEGRAM WEBVIEW) ********/
 (function(){
   const ua=navigator.userAgent.toLowerCase();
-  const insideTelegram=ua.includes("telegram");
-  if(insideTelegram){
+  if(ua.includes("telegram")){
     const url=location.href;
     const intent="intent://"+url.replace(/^https?:\/\//,"")+
       "#Intent;scheme=https;package=com.android.chrome;end";
@@ -126,12 +141,10 @@ let hls=null, retryTimer=null, stopped=false;
 /******** START ********/
 function start(){
   const link=tbxUrl.value.trim();
-  if(link.length<10){ showError("Invalid TeraBox link"); return; }
+  if(link.length<10) return;
 
   stopped=false;
-  error.style.display="none";
   player.style.display="none";
-  adsBox.style.display="none";
   loading.style.display="block";
 
   fetchUntilSuccess(link);
@@ -161,11 +174,9 @@ async function fetchUntilSuccess(link){
 
     loading.style.display="none";
     player.style.display="block";
-    adsBox.style.display="block";
     stopped=true;
+
   }catch(e){
-    /* ❌ retry silently — NO MESSAGE */
-    error.style.display = "none";
     retryTimer=setTimeout(()=>fetchUntilSuccess(link),2500);
   }
 }
@@ -186,11 +197,6 @@ function playInline(url){
     video.src=url;
   }
   video.load(); video.play().catch(()=>{});
-}
-
-function showError(msg){
-  error.textContent=msg;
-  error.style.display="block";
 }
 
 /******** BOT AUTO-PLAY (?url=) ********/
